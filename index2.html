@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRIME™ — Excelência Digital Redefinida</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <!-- Alpine.js for interactivity -->
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <!-- Custom Styles -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0a0a;
+            color: #f5f5f5;
+        }
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .gold-text {
+            color: #d4af37;
+        }
+        .gold-border {
+            border-color: #d4af37;
+        }
+        .gold-bg {
+            background-color: #d4af37;
+        }
+        .btn-primary {
+            @apply inline-block px-8 py-3 bg-[#d4af37] text-black uppercase font-bold tracking-widest rounded-md transition-all duration-300 ease-in-out;
+            @apply hover:bg-white hover:text-black hover:shadow-lg hover:shadow-[#d4af37]/20 transform hover:-translate-y-1;
+        }
+        .section-title {
+            @apply font-mono text-3xl md:text-4xl font-light uppercase tracking-[0.2em] text-center mb-4;
+        }
+        .section-subtitle {
+            @apply text-lg md:text-xl font-light text-center text-gray-400 mb-12 md:mb-16 max-w-3xl mx-auto;
+        }
+        #background-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.2;
+        }
+        .glass-effect {
+            background: rgba(26, 26, 26, 0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 100%;
+            background-color: #333;
+        }
+        @media (max-width: 768px) {
+            .timeline::before {
+                left: 20px;
+            }
+        }
+        
+        /* Estilo para o botão flutuante do WhatsApp */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body x-data="{ mobileMenuOpen: false }">
+
+    <!-- Background Animation Canvas -->
+    <canvas id="background-canvas"></canvas>
+
+    <!-- Header -->
+    <header x-data="{ scrolled: false }" @scroll.window="scrolled = (window.scrollY > 50)" 
+            :class="{ 'bg-[#0a0a0a]/80 backdrop-blur-lg border-b border-gray-800': scrolled, 'bg-transparent': !scrolled }" 
+            class="fixed top-0 left-0 w-full z-50 transition-all duration-300">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <!-- Logo -->
+            <a href="#home">
+                <img src="logo.png" alt="Logo PRIME" class="h-20 w-auto">
+            </a>
+            
+            <!-- Desktop Navigation -->
+            <nav class="hidden md:flex items-center space-x-8">
+                <a href="#about" class="text-gray-300 hover:gold-text transition-colors duration-300 uppercase text-sm tracking-widest">Sobre</a>
+                <a href="#services" class="text-gray-300 hover:gold-text transition-colors duration-300 uppercase text-sm tracking-widest">Serviços</a>
+                <a href="#process" class="text-gray-300 hover:gold-text transition-colors duration-300 uppercase text-sm tracking-widest">Processo</a>
+                <a href="#portfolio" class="text-gray-300 hover:gold-text transition-colors duration-300 uppercase text-sm tracking-widest">Portfolio</a>
+                <a href="#contact" class="inline-block px-6 py-2 border border-[#d4af37] text-[#d4af37] uppercase font-bold text-sm tracking-widest rounded-md transition-all duration-300 ease-in-out hover:bg-[#d4af37] hover:text-black">Contato</a>
+            </nav>
+
+            <!-- Mobile Menu Button -->
+            <div class="md:hidden">
+                <button @click="mobileMenuOpen = !mobileMenuOpen" class="text-white focus:outline-none">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path x-show="!mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                        <path x-show="mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div x-show="mobileMenuOpen" @click.away="mobileMenuOpen = false" x-transition class="md:hidden bg-[#0a0a0a] py-4">
+            <a href="#about" @click="mobileMenuOpen = false" class="block text-center py-3 text-gray-300 hover:gold-text transition-colors duration-300 uppercase tracking-widest">Sobre</a>
+            <a href="#services" @click="mobileMenuOpen = false" class="block text-center py-3 text-gray-300 hover:gold-text transition-colors duration-300 uppercase tracking-widest">Serviços</a>
+            <a href="#process" @click="mobileMenuOpen = false" class="block text-center py-3 text-gray-300 hover:gold-text transition-colors duration-300 uppercase tracking-widest">Processo</a>
+            <a href="#portfolio" @click="mobileMenuOpen = false" class="block text-center py-3 text-gray-300 hover:gold-text transition-colors duration-300 uppercase tracking-widest">Portfolio</a>
+            <a href="#contact" @click="mobileMenuOpen = false" class="block text-center py-3 text-gray-300 hover:gold-text transition-colors duration-300 uppercase tracking-widest">Contato</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="h-screen flex items-center justify-center text-center relative overflow-hidden">
+            <div class="container mx-auto px-6 z-10 flex flex-col items-center">
+                <img src="logo.png" onerror="this.onerror=null; this.src='https://placehold.co/400x150/png?text=SUA+LOGO';" alt="Logo da Empresa" class="w-full max-w-sm md:max-w-md mb-8 animate-fade-in-up">
+                <h1 class="font-mono text-4xl md:text-6xl lg:text-7xl font-bold uppercase tracking-widest text-white animate-fade-in-up" style="animation-delay: 0.3s;">Excelência Digital</h1>
+                <p class="text-lg md:text-2xl font-light mt-4 mb-8 text-gray-300 max-w-4xl mx-auto animate-fade-in-up" style="animation-delay: 0.6s;">Criamos experiências digitais memoráveis que impulsionam o seu negócio. Design, desenvolvimento e marketing, tudo em um só lugar.</p>
+                <a href="#contact" class="btn-primary animate-fade-in-up" style="animation-delay: 0.9s;">Vamos Iniciar Seu Projeto</a>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section id="stats" class="py-20 bg-black/20">
+            <div class="container mx-auto px-6">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                    <div class="stat-item">
+                        <h3 class="text-4xl md:text-5xl font-bold gold-text" data-target="150">+150</h3>
+                        <p class="text-gray-400 uppercase tracking-widest mt-2">Projetos Concluídos</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3 class="text-4xl md:text-5xl font-bold gold-text" data-target="98">98%</h3>
+                        <p class="text-gray-400 uppercase tracking-widest mt-2">Clientes Satisfeitos</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3 class="text-4xl md:text-5xl font-bold gold-text" data-target="12">12+</h3>
+                        <p class="text-gray-400 uppercase tracking-widest mt-2">Anos de Mercado</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3 class="text-4xl md:text-5xl font-bold gold-text" data-target="24">24/7</h3>
+                        <p class="text-gray-400 uppercase tracking-widest mt-2">Suporte Dedicado</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="py-20 md:py-32">
+            <div class="container mx-auto px-6">
+                 <div class="flex flex-col md:flex-row items-center gap-12 md:gap-16">
+                    <div class="md:w-1/2">
+                         <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=1470&auto=format&fit=crop" alt="Equipe da agência colaborando" class="rounded-lg shadow-2xl w-full h-auto object-cover">
+                    </div>
+                    <div class="md:w-1/2 text-center md:text-left">
+                        <h2 class="section-title text-left !mb-6">Nossa Agência</h2>
+                        <h3 class="text-2xl md:text-3xl font-bold mb-4">Sua Presença Digital, Nosso Foco.</h3>
+                        <p class="text-gray-300 mb-4">A Prime Agency é uma agência de ponta especializada em sites profissionais para empresas de todos os portes. Nosso foco vai além da criação de websites; integramos **marketing digital** e **design gráfico** para construir soluções completas que geram resultados reais.</p>
+                        <p class="text-gray-300">Atendemos desde pequenas e médias empresas que precisam de uma presença digital inicial até grandes corporações que buscam sistemas personalizados e otimização de suas plataformas existentes.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="py-20 md:py-32 bg-black/20">
+            <div class="container mx-auto px-6">
+                <h2 class="section-title">Nossos Serviços</h2>
+                <p class="section-subtitle">Soluções digitais completas para impulsionar seu negócio.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Cards de serviço (mesma estrutura anterior) -->
+                     <div class="glass-effect p-8 rounded-lg text-center transition-all duration-300 hover:transform hover:-translate-y-2 hover:border-[#d4af37]">
+                        <div class="flex justify-center mb-4">
+                           <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layout-template"><rect width="18" height="7" x="3" y="3" rx="1"/><rect width="9" height="7" x="3" y="14" rx="1"/><rect width="5" height="7" x="16" y="14" rx="1"/></svg>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Sites Empresariais</h3>
+                        <p class="text-gray-400">Criamos sites profissionais e responsivos, construindo a vitrine ideal para sua empresa na internet.</p>
+                    </div>
+                    <div class="glass-effect p-8 rounded-lg text-center transition-all duration-300 hover:transform hover:-translate-y-2 hover:border-[#d4af37]">
+                        <div class="flex justify-center mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shopping-cart"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.16"/></svg>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">E-commerce</h3>
+                        <p class="text-gray-400">Lojas virtuais completas e seguras, otimizadas para conversões e uma ótima experiência de compra.</p>
+                    </div>
+                    <div class="glass-effect p-8 rounded-lg text-center transition-all duration-300 hover:transform hover:-translate-y-2 hover:border-[#d4af37]">
+                        <div class="flex justify-center mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pen-tool"><path d="m12 19 7-7 3 3-7 7-3-3z"/><path d="m18 13-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="m2 2 7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Design Gráfico</h3>
+                        <p class="text-gray-400">Da identidade visual à criação de materiais, fortalecemos a imagem e o diferencial da sua marca.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Process Section -->
+        <section id="process" class="py-20 md:py-32">
+            <div class="container mx-auto px-6">
+                <h2 class="section-title">Nosso Processo</h2>
+                <p class="section-subtitle">Transparência e excelência em cada etapa do seu projeto.</p>
+                <div class="relative timeline">
+                    <!-- Timeline Item 1 -->
+                    <div class="mb-8 flex justify-between md:items-center w-full" :class="window.innerWidth > 768 ? 'flex-row-reverse' : 'flex-row'">
+                        <div class="order-1 md:w-5/12"></div>
+                        <div class="z-20 flex items-center order-1 bg-gray-800 shadow-xl w-10 h-10 md:w-12 md:h-12 rounded-full">
+                            <h1 class="mx-auto font-semibold text-lg gold-text">1</h1>
+                        </div>
+                        <div class="order-1 glass-effect rounded-lg shadow-xl md:w-5/12 px-6 py-4">
+                            <h3 class="font-bold text-white text-xl">Análise e Planejamento</h3>
+                            <p class="text-sm text-gray-300">Entendemos seu negócio, público e objetivos para criar uma estratégia digital sob medida.</p>
+                        </div>
+                    </div>
+                    <!-- Timeline Item 2 -->
+                    <div class="mb-8 flex justify-between items-center w-full">
+                        <div class="order-1 md:w-5/12"></div>
+                        <div class="z-20 flex items-center order-1 bg-gray-800 shadow-xl w-10 h-10 md:w-12 md:h-12 rounded-full">
+                           <h1 class="mx-auto font-semibold text-lg gold-text">2</h1>
+                        </div>
+                        <div class="order-1 glass-effect rounded-lg shadow-xl md:w-5/12 px-6 py-4">
+                            <h3 class="font-bold text-white text-xl">Design e UI/UX</h3>
+                            <p class="text-sm text-gray-300">Criamos interfaces intuitivas e visualmente impactantes, focadas na melhor experiência do usuário.</p>
+                        </div>
+                    </div>
+                     <!-- Timeline Item 3 -->
+                    <div class="mb-8 flex justify-between md:items-center w-full" :class="window.innerWidth > 768 ? 'flex-row-reverse' : 'flex-row'">
+                        <div class="order-1 md:w-5/12"></div>
+                        <div class="z-20 flex items-center order-1 bg-gray-800 shadow-xl w-10 h-10 md:w-12 md:h-12 rounded-full">
+                            <h1 class="mx-auto font-semibold text-lg gold-text">3</h1>
+                        </div>
+                        <div class="order-1 glass-effect rounded-lg shadow-xl md:w-5/12 px-6 py-4">
+                            <h3 class="font-bold text-white text-xl">Desenvolvimento</h3>
+                            <p class="text-sm text-gray-300">Utilizamos tecnologias de ponta para construir uma solução robusta, rápida e escalável.</p>
+                        </div>
+                    </div>
+                     <!-- Timeline Item 4 -->
+                    <div class="mb-8 flex justify-between items-center w-full">
+                        <div class="order-1 md:w-5/12"></div>
+                        <div class="z-20 flex items-center order-1 bg-gray-800 shadow-xl w-10 h-10 md:w-12 md:h-12 rounded-full">
+                           <h1 class="mx-auto font-semibold text-lg gold-text">4</h1>
+                        </div>
+                        <div class="order-1 glass-effect rounded-lg shadow-xl md:w-5/12 px-6 py-4">
+                            <h3 class="font-bold text-white text-xl">Lançamento e Suporte</h3>
+                            <p class="text-sm text-gray-300">Lançamos seu projeto e oferecemos suporte contínuo para garantir performance e segurança.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Portfolio Section -->
+        <section id="portfolio" class="py-20 md:py-32 bg-black/20">
+            <!-- Conteúdo do portfólio (mesma estrutura anterior) -->
+             <div class="container mx-auto px-6">
+                <h2 class="section-title">Nosso Trabalho</h2>
+                <p class="section-subtitle">Conheça alguns dos projetos que nos orgulhamos de ter criado.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="group relative overflow-hidden rounded-lg">
+                        <img src="https://images.unsplash.com/photo-1559028006-44d5755148b8?q=80&w=1548&auto=format&fit=crop" alt="Projeto E-commerce de Moda" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-black/70 flex flex-col justify-end p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                            <h3 class="text-xl font-bold text-white">Bella Moda</h3>
+                            <p class="text-gray-300">E-commerce de moda com foco em conversão.</p>
+                        </div>
+                    </div>
+                    <div class="group relative overflow-hidden rounded-lg">
+                        <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=1470&auto=format&fit=crop" alt="Projeto Site Corporativo" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-black/70 flex flex-col justify-end p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                            <h3 class="text-xl font-bold text-white">TechCorp</h3>
+                            <p class="text-gray-300">Site corporativo para empresa de tecnologia.</p>
+                        </div>
+                    </div>
+                    <div class="group relative overflow-hidden rounded-lg">
+                        <img src="https://images.unsplash.com/photo-1543286386-713bdd548da4?q=80&w=1470&auto=format&fit=crop" alt="Projeto Sistema de Gestão" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-black/70 flex flex-col justify-end p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                            <h3 class="text-xl font-bold text-white">FitLife Pro</h3>
+                            <p class="text-gray-300">Sistema de gestão para academias.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Testimonials Section -->
+        <section id="testimonials" class="py-20 md:py-32">
+            <!-- Conteúdo dos depoimentos (mesma estrutura anterior) -->
+            <div class="container mx-auto px-6">
+                <h2 class="section-title">Depoimentos</h2>
+                <p class="section-subtitle">O que nossos clientes de sucesso têm a dizer.</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                    <div class="glass-effect p-8 rounded-lg">
+                        <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Foto de Maria Silva" class="w-24 h-24 rounded-full mx-auto mb-4 border-2 border-[#d4af37]">
+                        <p class="text-gray-300 italic mb-4">"O novo e-commerce gerou um **aumento de 400% nas vendas** em apenas três meses. O suporte foi fantástico!"</p>
+                        <h4 class="font-bold text-lg">Maria Silva</h4>
+                        <p class="gold-text">CEO, Bella Moda</p>
+                    </div>
+                    <div class="glass-effect p-8 rounded-lg">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Foto de João Santos" class="w-24 h-24 rounded-full mx-auto mb-4 border-2 border-[#d4af37]">
+                        <p class="text-gray-300 italic mb-4">"A qualidade do site da TechCorp é superior. A equipe foi extremamente profissional e entregou um produto que reflete a nossa marca."</p>
+                        <h4 class="font-bold text-lg">João Santos</h4>
+                        <p class="gold-text">Diretor, TechCorp</p>
+                    </div>
+                    <div class="glass-effect p-8 rounded-lg">
+                        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Foto de Ana Costa" class="w-24 h-24 rounded-full mx-auto mb-4 border-2 border-[#d4af37]">
+                        <p class="text-gray-300 italic mb-4">"O sistema para academia que eles desenvolveram é incrível. Nosso fluxo de trabalho melhorou e o suporte é sempre ágil."</p>
+                        <h4 class="font-bold text-lg">Ana Costa</h4>
+                        <p class="gold-text">Gerente, FitLife Pro</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-20 md:py-32 bg-black/20">
+            <div class="container mx-auto px-6">
+                <h2 class="section-title">Vamos Conversar</h2>
+                <p class="section-subtitle">Pronto para transformar sua presença digital? Envie-nos uma mensagem.</p>
+                <div class="max-w-4xl mx-auto glass-effect rounded-lg p-8 md:p-12 flex flex-col md:flex-row gap-8">
+                     <div class="md:w-1/2">
+                        <h3 class="text-2xl font-bold mb-4">Informações de Contato</h3>
+                        <p class="text-gray-300 mb-6">Estamos disponíveis para discutir seu projeto. Entre em contato por email, telefone ou preencha o formulário ao lado.</p>
+                        <div class="space-y-4">
+                            <p class="flex items-center"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-3"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg> Rua Exemplo, 123 - São Paulo, SP</p>
+                            <p class="flex items-center"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-3"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg> (11) 99999-9999</p>
+                            <p class="flex items-center"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-3"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg> contato@prime.com</p>
+                            <!-- Adicionando o contato via WhatsApp -->
+                            <p class="flex items-center">
+                                <!-- Ícone de mensagem (pode ser trocado por um ícone de WhatsApp se preferir) -->
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-circle-call mr-3"><path d="M7.9 20A9.9 9.9 0 0 0 12 22a9.9 9.9 0 0 0 4.1-0.8L22 22l-1.6-5.4a9.9 9.9 0 0 0 1.6-4.6C22 4.1 17.9 0 13 0S4 4.1 4 9c0 2.4.9 4.8 2.5 6.4L2 22l5.9-2z"/><path d="M12.2 10.2c-2.4 2.4-4.5 4.5-6.6 6.6L12.2 10.2z"/></svg>
+                                <!-- Link direto para o WhatsApp. Altere o número para o seu! -->
+                                <a href="https://wa.me/5511999999999" target="_blank" class="text-gray-300 hover:gold-text">(11) 99999-9999 (WhatsApp)</a>
+                            </p>
+                        </div>
+                     </div>
+                     <div class="md:w-1/2">
+                         <form id="contact-form">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                <input type="text" name="name" placeholder="Seu nome" required class="w-full bg-gray-900/50 border border-gray-700 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-[#d4af37] transition-all">
+                                <input type="email" name="email" placeholder="Seu email" required class="w-full bg-gray-900/50 border border-gray-700 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-[#d4af37] transition-all">
+                            </div>
+                            <div class="mb-6">
+                                <textarea name="message" placeholder="Sua mensagem" rows="5" required class="w-full bg-gray-900/50 border border-gray-700 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-[#d4af37] transition-all"></textarea>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn-primary w-full">Enviar Mensagem</button>
+                            </div>
+                        </form>
+                        <div id="form-feedback" class="text-center mt-6"></div>
+
+                        <!-- Botão de contato via WhatsApp adicionado -->
+                        <div class="text-center mt-8">
+                            <a href="https://wa.me/5511999999999" target="_blank" class="btn-primary w-full">
+                                <!-- Ícone de WhatsApp (SVG) -->
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 inline-block mr-2"><path d="M12.04 2C7.39 2 3.66 5.73 3.66 10.38C3.66 12.83 4.54 14.89 6.03 16.63L3.38 23L10.3 20.35C11.97 21.05 13.79 21.36 15.65 21.36H15.82C20.57 21.36 24.3 17.63 24.3 12.98C24.3 8.33 20.57 4.6 15.82 4.6S7.31 8.33 7.31 12.98h2.09c0-3.35 2.72-6.07 6.07-6.07c3.35 0 6.07 2.72 6.07 6.07c0 3.35-2.72 6.07-6.07 6.07H15.65c-1.28 0-2.43-.37-3.46-.96L8.52 18.23l2.87-3.41c1.24.62 2.65.96 4.14.96h.17c3.35 0 6.07-2.72 6.07-6.07S19.17 6.91 15.82 6.91s-6.07 2.72-6.07 6.07H7.31c0-4.65 3.73-8.38 8.38-8.38s8.38 3.73 8.38 8.38-3.73 8.38-8.38 8.38-8.38-3.73-8.38-8.38Z"/></svg>
+                                Fale Conosco no WhatsApp
+                            </a>
+                        </div>
+                     </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-black py-12">
+        <div class="container mx-auto px-6 text-center text-gray-400">
+             <div class="flex justify-center space-x-6 mb-6">
+                <a href="#" class="hover:text-white transition-colors">Facebook</a>
+                <a href="#" class="hover:text-white transition-colors">Instagram</a>
+                <a href="#" class="hover:text-white transition-colors">LinkedIn</a>
+            </div>
+            <p>&copy; 2024 Prime Agency. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Botão flutuante do WhatsApp -->
+    <a href="https://wa.me/5511999999999" target="_blank" class="whatsapp-float bg-[#25D366] text-white p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110">
+        <img src="icone.png" alt="WhatsApp" class="w-8 h-8">
+    </a>
+
+
+    <script>
+        // --- Animação de Partículas no Background ---
+        const canvas = document.getElementById('background-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particlesArray;
+
+        const mouse = { x: null, y: null, radius: (canvas.height/120) * (canvas.width/120) };
+        window.addEventListener('mousemove', event => { mouse.x = event.x; mouse.y = event.y; });
+        window.addEventListener('mouseout', () => { mouse.x = undefined; mouse.y = undefined; });
+        window.addEventListener('resize', () => {
+            canvas.width = innerWidth;
+            canvas.height = innerHeight;
+            mouse.radius = ((canvas.height/120) * (canvas.height/120));
+            initParticles();
+        });
+        
+        class Particle {
+            constructor(x, y, directionX, directionY, size, color) {
+                this.x = x; this.y = y; this.directionX = directionX; this.directionY = directionY; this.size = size; this.color = color;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+            update() {
+                if (this.x > canvas.width || this.x < 0) { this.directionX = -this.directionX; }
+                if (this.y > canvas.height || this.y < 0) { this.directionY = -this.directionY; }
+
+                let dx = mouse.x - this.x;
+                let dy = mouse.y - this.y;
+                let distance = Math.sqrt(dx*dx + dy*dy);
+                if (distance < mouse.radius + this.size){
+                    if(mouse.x < this.x && this.x < canvas.width - this.size * 10) { this.x += 5; }
+                    if(mouse.x > this.x && this.x > this.size * 10) { this.x -= 5; }
+                    if(mouse.y < this.y && this.y < canvas.height - this.size * 10) { this.y += 5; }
+                    if(mouse.y > this.y && this.y > this.size * 10) { this.y -= 5; }
+                }
+                this.x += this.directionX;
+                this.y += this.directionY;
+                this.draw();
+            }
+        }
+
+        function initParticles() {
+            particlesArray = [];
+            let numberOfParticles = (canvas.height * canvas.width) / 9000;
+            for (let i = 0; i < numberOfParticles; i++) {
+                let size = (Math.random() * 2) + 1;
+                let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
+                let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
+                let directionX = (Math.random() * 0.4) - 0.2;
+                let directionY = (Math.random() * 0.4) - 0.2;
+                let color = 'rgba(212, 175, 55, 0.8)';
+                particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
+            }
+        }
+
+        function animateParticles() {
+            requestAnimationFrame(animateParticles);
+            ctx.clearRect(0,0,innerWidth, innerHeight);
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+            }
+            connectParticles();
+        }
+
+        function connectParticles(){
+            let opacityValue = 1;
+            for (let a = 0; a < particlesArray.length; a++) {
+                for (let b = a; b < particlesArray.length; b++) {
+                    let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x)) + ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
+                    if (distance < (canvas.width/7) * (canvas.height/7)) {
+                        opacityValue = 1 - (distance/20000);
+                        ctx.strokeStyle = `rgba(212, 175, 55, ${opacityValue})`;
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+                        ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+        
+        initParticles();
+        animateParticles();
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Animação de Contagem (Stats) ---
+            const statsObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const el = entry.target;
+                        const target = parseInt(el.dataset.target.replace(/[^0-9]/g, ''));
+                        const symbol = el.dataset.target.replace(/[0-9]/g, '');
+                        let current = 0;
+                        const increment = target / 100;
+
+                        const updateCount = () => {
+                            if (current < target) {
+                                current += increment;
+                                if (current > target) current = target;
+                                el.innerText = Math.ceil(current) + symbol;
+                                requestAnimationFrame(updateCount);
+                            } else {
+                                el.innerText = el.dataset.target;
+                            }
+                        };
+                        updateCount();
+                        observer.unobserve(el);
+                    }
+                });
+            }, { threshold: 0.5 });
+            
+            document.querySelectorAll('.stat-item h3').forEach(item => {
+                statsObserver.observe(item);
+            });
+            
+            // --- Animação de Revelação ao Rolar ---
+            const scrollObserver = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if(entry.isIntersecting) {
+                        entry.target.classList.add('animate-fade-in-up');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('section > div > *, .timeline > div').forEach((el) => {
+                el.classList.add('opacity-0');
+                scrollObserver.observe(el);
+            });
+
+            // --- Manipulador de Formulário ---
+            document.getElementById('contact-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const feedbackEl = document.getElementById('form-feedback');
+                feedbackEl.textContent = 'Obrigado! Sua mensagem foi enviada com sucesso.';
+                feedbackEl.className = 'text-green-400 font-bold';
+                this.reset();
+                setTimeout(() => { feedbackEl.textContent = ''; }, 5000);
+            });
+
+            // --- Animação Tailwind Customizada ---
+            const style = document.createElement('style');
+            style.innerHTML = `
+                @keyframes fade-in-up {
+                    from { opacity: 0; transform: translateY(20px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+                .animate-fade-in-up {
+                    animation: fade-in-up 0.8s ease-out forwards;
+                }
+            `;
+            document.head.appendChild(style);
+        });
+    </script>
+</body>
+</html>
